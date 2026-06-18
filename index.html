@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cultural Heritage Register</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f9; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; max-width: 400px; width: 100%; }
+        input[type="email"] { width: 90%; padding: 10px; margin: 15px 0; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #0056b3; }
+        #message { margin-top: 15px; font-weight: bold; color: green; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Welcome to CHSMS</h2>
+    <p>Please enter your email below.</p>
+    
+    <form id="emailForm">
+        <input type="email" id="customerEmail" placeholder="Enter your email address" required>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+    
+    <div id="message"></div>
+</div>
+
+<script>
+    // 1. YOUR SUPABASE CREDENTIALS (Get these from Supabase Settings -> API)
+    const SUPABASE_URL = "https://hwhqwjivazdozojhkeli.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh3aHF3aml2YXpkb3pvamhrZWxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3NTgwNjcsImV4cCI6MjA5NzMzNDA2N30.5qgsM9KZ2Ff7EiYWab9yCXfhmibRZOwh4UXM0UiU92Q";
+
+    // Initialize Supabase client
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // 2. Handle Form Submission
+    document.getElementById('emailForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const emailInput = document.getElementById('customerEmail').value;
+        const messageDiv = document.getElementById('message');
+
+        // Insert data into Supabase
+        const { data, error } = await supabaseClient
+            .from('customer_emails')
+            .insert([{ email: emailInput }]);
+
+        if (error) {
+            console.error(error);
+            messageDiv.style.color = "red";
+            messageDiv.innerText = "Something went wrong. Please try again.";
+        } else {
+            // Success Message requested by your project spec
+            messageDiv.style.color = "green";
+            messageDiv.innerText = "You will receive more details through an email.";
+            document.getElementById('emailForm').reset();
+        }
+    });
+</script>
+
+</body>
+</html>
