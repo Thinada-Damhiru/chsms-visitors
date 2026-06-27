@@ -92,6 +92,8 @@
 		<p>Please enter your email below.</p>
 
 		<form id="emailForm">
+			<input type="hidden" id="qrSource" value="2" />
+			
 			<input type="email" id="customerEmail" placeholder="Enter email" required />
 			<br />
 			<button type="submit">Submit</button>
@@ -99,7 +101,8 @@
 
 		<div id="message"></div>
 	</div>
-<script>
+
+	<script>
 		// Replace these with your actual Supabase project details
 		const SUPABASE_URL = "https://hwhqwjivazdozojhkeli.supabase.co";
 		const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh3aHF3aml2YXpkb3pvamhrZWxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3NTgwNjcsImV4cCI6MjA5NzMzNDA2N30.5qgsM9KZ2Ff7EiYWab9yCXfhmibRZOwh4UXM0UiU92Q";
@@ -110,7 +113,10 @@
 			const emailInput = document.getElementById('customerEmail');
 			const messageDiv = document.getElementById('message');
 			const submitButton = e.target.querySelector('button');
+			
 			const email = emailInput.value;
+			// 2. Extracted the hidden source code tracking value ("1")
+			const source = document.getElementById('qrSource').value;
 
 			// Set a loading state
 			messageDiv.style.marginTop = '15px';
@@ -125,7 +131,8 @@
 						'Content-Type': 'application/json',
 						'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
 					},
-					body: JSON.stringify({ email: email })
+					// 3. Bundled both parameters into the outgoing request payload
+					body: JSON.stringify({ email: email, source: source })
 				});
 
 				const result = await response.json();
@@ -150,3 +157,5 @@
 			}
 		});
 	</script>
+</body>
+</html>
