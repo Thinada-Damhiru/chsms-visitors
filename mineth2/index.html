@@ -103,11 +103,9 @@
 	</div>
 
 	<script>
-		// Replace these with your actual Supabase project details
 		const SUPABASE_URL = "https://hwhqwjivazdozojhkeli.supabase.co";
 		const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh3aHF3aml2YXpkb3pvamhrZWxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3NTgwNjcsImV4cCI6MjA5NzMzNDA2N30.5qgsM9KZ2Ff7EiYWab9yCXfhmibRZOwh4UXM0UiU92Q";
 
-		// 1. TURN ON THE DATABASE CLIENT
 		const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 		document.getElementById('emailForm').addEventListener('submit', async (e) => {
@@ -118,37 +116,28 @@
 			const submitButton = e.target.querySelector('button');
 			
 			const email = emailInput.value;
-			// Extracted the hidden source code tracking value ("1" or "2")
 			const source = document.getElementById('qrSource').value;
 
-			// Set a loading state
 			messageDiv.style.marginTop = '15px';
 			messageDiv.style.color = 'white';
 			messageDiv.innerText = 'Sending...';
 			submitButton.disabled = true; 
 
 			try {
-				// ==========================================
-				// 2. ADD THE SITE ID STUFF TO THE DATABASE
-				// ==========================================
 				const { error: dbError } = await supabase
 					.from('visitors_emails')
 					.insert([
 						{ 
 							email: email, 
-							site: parseInt(source) // This saves the "1" or "2" into the site column!
+							site: parseInt(source)
 						}
 					]);
 
-				// If the database fails, stop the process and show an error
 				if (dbError) {
 					console.error("Database Error:", dbError);
 					throw new Error("Failed to save to database. Check your table permissions.");
 				}
 
-				// ==========================================
-				// 3. SEND THE EMAIL (Runs only if DB save was successful)
-				// ==========================================
 				const response = await fetch(`${SUPABASE_URL}/functions/v1/send-email`, {
 					method: 'POST',
 					headers: {
@@ -161,12 +150,10 @@
 				const result = await response.json();
 				
 				if (response.ok) {
-					// Success: Text matches your green button
 					messageDiv.style.color = '#8BC34A'; 
 					messageDiv.innerText = 'Email sent successfully!';
-					emailInput.value = ''; // Clear the input field
+					emailInput.value = ''; 
 				} else {
-					// Error: Light red text
 					messageDiv.style.color = '#ff6b6b'; 
 					messageDiv.innerText = 'Error: ' + (result.error || 'Failed to send.');
 				}
@@ -175,7 +162,6 @@
 				messageDiv.style.color = '#ff6b6b';
 				messageDiv.innerText = err.message || 'An error occurred connecting to the server.';
 			} finally {
-				// Re-enable the button after the process is done
 				submitButton.disabled = false;
 			}
 		});
