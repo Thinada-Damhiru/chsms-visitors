@@ -106,10 +106,11 @@
 		const SUPABASE_URL = "https://hwhqwjivazdozojhkeli.supabase.co";
 		const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh3aHF3aml2YXpkb3pvamhrZWxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3NTgwNjcsImV4cCI6MjA5NzMzNDA2N30.5qgsM9KZ2Ff7EiYWab9yCXfhmibRZOwh4UXM0UiU92Q";
 
-		const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+		// Renamed to 'supabaseClient' to completely avoid the duplicate error
+		const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 		document.getElementById('emailForm').addEventListener('submit', async (e) => {
-			e.preventDefault();
+			e.preventDefault(); // This will now successfully stop the page redirect!
 			
 			const emailInput = document.getElementById('customerEmail');
 			const messageDiv = document.getElementById('message');
@@ -124,7 +125,8 @@
 			submitButton.disabled = true; 
 
 			try {
-				const { error: dbError } = await supabase
+				// Using the renamed 'supabaseClient' here
+				const { error: dbError } = await supabaseClient
 					.from('visitors_emails')
 					.insert([
 						{ 
