@@ -8,25 +8,27 @@
 
 	<style>
 		/* 1. This strictly blocks the extra white space on mobile */
-		html, body {
-			max-width: 100%;
-			overflow-x: hidden;
-			margin: 0;
-			padding: 0;
-		}
+		/* 1. This strictly blocks the extra white space on mobile (Both X and Y axis) */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden; /* <-- THIS KILLS THE VERTICAL SCROLLING */
+    margin: 0;
+    padding: 0;
+    height: 100%; /* A fallback floor for older phones */
+}
 
-		/* 2. This perfectly centers your card on desktop */
-		body {
-			font-family: "Century Gothic", Arial, sans-serif;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			height: 100vh;
-			background-color: #ffffff;
-			position: relative;
-			overflow: hidden; 
-		}
-
+/* 2. This perfectly centers your card on desktop and mobile */
+body {
+    font-family: "Century Gothic", Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100dvh; /* <-- CHANGED FROM 100vh TO 100dvh */
+    background-color: #ffffff;
+    position: relative;
+    overflow: hidden; 
+}
 		/* --- NEW: Mosaic / Bento Box Background Grid --- */
 		.background-grid {
 			position: absolute;
