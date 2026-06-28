@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>CHSMS Register</title>
+	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+	<style>
+		body {
+			font-family: "Century Gothic", Arial, sans-serif;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			background-color: #ffffff;
+			margin: 0;
+			position: relative;
+			overflow: hidden;
+		}
+
+		/* --- NEW: Museum Archive Background Style --- */
+		.bg-image {
+		position: absolute;
+		width: 240px;  /* INCREASED FROM 180px */
+		height: 160px; /* INCREASED FROM 120px */
+		object-fit: cover; 
+		border-radius: 12px; 
+		opacity: 0.25; /* You can increase this to 0.3 or 0.4 if you want them brighter */
+		/*filter: grayscale(100%); /* BLUR REMOVED. (Delete this whole line if you want full-color images) */
+		box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+		user-select: none;
+		pointer-events: none;
+		z-index: 1;
+		transition: all 0.5s ease;
+		}
+
+		/* Desktop Positioning */
+		.image-1 { top: 8%; left: 8%; transform: rotate(-15deg); }
+		.image-2 { top: 12%; right: 10%; transform: rotate(20deg); }
+		.image-3 { bottom: 10%; left: 12%; transform: rotate(10deg); }
+		.image-4 { bottom: 8%; right: 8%; transform: rotate(-25deg); }
+		.image-5 { top: 42%; left: 18.5%; transform: rotate(45deg); width: 140px; height: 140px; }
+		.image-6 { top: 45%; right: 18.5%; transform: rotate(-30deg); width: 140px; height: 140px; }
+		.image-7 { top: 6%; left: 48%; transform: rotate(15deg); }
+		.image-8 { bottom: 6%; left: 50%; transform: rotate(-10deg); }
+
+		.card {
+			background: #284A9D;
+			padding: 40px 30px;
+			border-radius: 15px;
+			box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+			text-align: center;
+			max-width: 400px;
+			width: 85%;
+			position: relative;
+			z-index: 2;
+		}
+
+		h2, p {
+			color: #ffffff;
+		}
+
+		input {
+			width: 90%;
+			padding: 12px;
+			border: none;
+			border-bottom: 2px solid rgb(255, 255, 255);
+			background: transparent;
+			color: rgb(255, 255, 255);
+			outline: none;
+		}
+
+		button {
+			background-color: black;
+			color: white;
+			border: none;
+			padding: 14px 40px;
+			border-radius: 10px;
+			cursor: pointer;
+			font-weight: bold;
+			margin-top: 30px;
+		}
+
+		/* --- NEW: Mobile Responsive Fixes --- */
+		@media (max-width: 768px) {
+			.bg-image {
+				width: 90px;
+				height: 60px;
+				opacity: 0.10; 
+			}
+
+			.image-5, .image-6, .image-7, .image-8 {
+				display: none; 
+			}
+
+			.image-1 { top: 3%; left: -2%; transform: rotate(-10deg); }
+			.image-2 { top: 3%; right: -2%; transform: rotate(15deg); }
+			.image-3 { bottom: 3%; left: -2%; transform: rotate(10deg); }
+			.image-4 { bottom: 3%; right: -2%; transform: rotate(-15deg); }
+			
+			.card {
+				width: 90%; 
+				padding: 30px 20px;
+			}
+		}
+		#customerEmail::placeholder {
+    	color: white;
+    	opacity: 1; /* Firefox lowers placeholder opacity by default, this forces it to be solid */
+		}
+
+	</style>
+</head>
+
+<body>
+
+	<img src="image1.jpg" class="bg-image image-1" alt="Historical Site">
+	<img src="2.jpg" class="bg-image image-2" alt="Historical Site">
+	<img src="3.jpg" class="bg-image image-3" alt="Historical Site">
+	<img src="4.jpeg" class="bg-image image-4" alt="Historical Site">
+	<img src="5.webp" class="bg-image image-5" alt="Historical Site">
+	<img src="6.webp" class="bg-image image-6" alt="Historical Site">
+	<img src="7.webp" class="bg-image image-7" alt="Historical Site">
+	<img src="8.png" class="bg-image image-8" alt="Historical Site">
+
+	<div class="card">
+		<h2>Welcome to CHSMS</h2>
+		<p style="color: white;">Please enter your email below.</p>
+
+		<form id="emailForm">
+			<input type="hidden" id="qrSource" value="1" />
+			
+			<input type="email" id="customerEmail" placeholder="Enter email" required />
+			<br />
+			<button type="submit">Submit</button>
+		</form>
+
+		<div id="message"></div>
+	</div>
+
+	<script>
+		const SUPABASE_URL = "https://hwhqwjivazdozojhkeli.supabase.co";
+		const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh3aHF3aml2YXpkb3pvamhrZWxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3NTgwNjcsImV4cCI6MjA5NzMzNDA2N30.5qgsM9KZ2Ff7EiYWab9yCXfhmibRZOwh4UXM0UiU92Q";
+
+		const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+		document.getElementById('emailForm').addEventListener('submit', async (e) => {
+			e.preventDefault(); 
+			
+			const emailInput = document.getElementById('customerEmail');
+			const messageDiv = document.getElementById('message');
+			const submitButton = e.target.querySelector('button');
+			
+			const email = emailInput.value;
+			const source = document.getElementById('qrSource').value;
+
+			messageDiv.style.marginTop = '15px';
+			messageDiv.style.color = 'black'; /* Changed to black since background is white */
+			messageDiv.innerText = 'Sending...';
+			submitButton.disabled = true; 
+
+			try {
+				const { error: dbError } = await supabaseClient
+					.from('visitors_emails')
+					.insert([
+						{ 
+							email: email, 
+							site: parseInt(source)
+						}
+					]);
+
+				if (dbError) {
+					console.error("Database Error:", dbError);
+					throw new Error("Failed to save to database. Check your table permissions.");
+				}
+
+				const response = await fetch(`${SUPABASE_URL}/functions/v1/send-email`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+					},
+					body: JSON.stringify({ email: email, source: source })
+				});
+
+				const result = await response.json();
+				
+				if (response.ok) {
+					messageDiv.style.color = '#4CAF50'; /* A slightly darker green for white backgrounds */
+					messageDiv.innerText = 'Email sent successfully!';
+					emailInput.value = ''; 
+				} else {
+					messageDiv.style.color = '#ff6b6b'; 
+					messageDiv.innerText = 'Error: ' + (result.error || 'Failed to send.');
+				}
+			} catch (err) {
+				console.error(err);
+				messageDiv.style.color = '#ff6b6b';
+				messageDiv.innerText = err.message || 'An error occurred connecting to the server.';
+			} finally {
+				submitButton.disabled = false;
+			}
+		});
+	</script>
+</body>
+</html>
