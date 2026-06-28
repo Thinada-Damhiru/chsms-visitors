@@ -9,50 +9,76 @@
 	<style>
 		/* 1. This strictly blocks the extra white space on mobile */
 		html, body {
-    	max-width: 100%;
-    	overflow-x: hidden;
-		margin: 0;
-		padding: 0;
+			max-width: 100%;
+			overflow-x: hidden;
+			margin: 0;
+			padding: 0;
 		}
 
 		/* 2. This perfectly centers your card on desktop */
 		body {
-		font-family: "Century Gothic", Arial, sans-serif;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		height: 100vh;
-		background-color: #ffffff;
-		position: relative;
-		overflow: hidden; 
+			font-family: "Century Gothic", Arial, sans-serif;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			background-color: #ffffff;
+			position: relative;
+			overflow: hidden; 
 		}
 
-		/* --- NEW: Museum Archive Background Style --- */
-		.bg-image {
-		position: absolute;
-		width: 240px;  /* INCREASED FROM 180px */
-		height: 160px; /* INCREASED FROM 120px */
-		object-fit: cover; 
-		border-radius: 12px; 
-		opacity: 0.6; /* You can increase this to 0.3 or 0.4 if you want them brighter */
-		/*filter: grayscale(100%);  BLUR REMOVED. (Delete this whole line if you want full-color images) */
-		box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-		user-select: none;
-		pointer-events: none;
-		z-index: 1;
-		transition: all 0.5s ease;
+		/* --- NEW: Mosaic / Bento Box Background Grid --- */
+		.background-grid {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100vh;
+			display: grid;
+			/* This creates a fluid grid of columns */
+			grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+			grid-auto-rows: 200px; /* Base height for all grid blocks */
+			grid-auto-flow: dense; /* The packing algorithm */
+			gap: 15px; 
+			padding: 15px;
+			box-sizing: border-box;
+			z-index: 1;
+			opacity: 0.3; /* Keep it low so the form is readable */
 		}
 
-		/* Desktop Positioning */
-		.image-1 { top: 8%; left: 8%; transform: rotate(-15deg); }
-		.image-2 { top: 12%; right: 10%; transform: rotate(20deg); }
-		.image-3 { bottom: 10%; left: 12%; transform: rotate(10deg); }
-		.image-4 { bottom: 8%; right: 8%; transform: rotate(-25deg); }
-		.image-5 { top: 42%; left: 18.5%; transform: rotate(45deg); width: 140px; height: 140px; }
-		.image-6 { top: 45%; right: 18.5%; transform: rotate(-30deg); width: 140px; height: 140px; }
-		.image-7 { top: 3.5%; left: 44%; transform: rotate(12deg); }
-		.image-8 { bottom: 3.5%; left: 45%; transform: rotate(-10deg); }
+		/* Base style for every image in the grid */
+		.grid-image {
+			width: 100%;
+			height: 100%;
+			object-fit: cover; 
+			border-radius: 12px;
+			box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+			user-select: none;
+			pointer-events: none;
+		}
 
+		/* The Sizing Blocks - Change these in your HTML to alter the pattern */
+		.size-large {
+			grid-column: span 2; 
+			grid-row: span 2;    
+		}
+
+		.size-wide {
+			grid-column: span 2;
+			grid-row: span 1;
+		}
+
+		.size-tall {
+			grid-column: span 1;
+			grid-row: span 2;
+		}
+
+		.size-small {
+			grid-column: span 1;
+			grid-row: span 1;
+		}
+
+		/* --- Form Card Styles --- */
 		.card {
 			background: #284A9D;
 			padding: 40px 30px;
@@ -79,6 +105,11 @@
 			outline: none;
 		}
 
+		#customerEmail::placeholder {
+			color: white;
+			opacity: 1; 
+		}
+
 		button {
 			background-color: black;
 			color: white;
@@ -90,49 +121,37 @@
 			margin-top: 30px;
 		}
 
-		/* --- NEW: Mobile Responsive Fixes --- */
+		/* --- Mobile Responsive Fixes --- */
 		@media (max-width: 768px) {
-		.bg-image {
-		/* Change these to make them bigger on phones */
-		width: 160px;  
-		height: 110px; 
-		
-		/* Change this to fix your opacity issue on phones */
-		opacity: 0.75; 
-			}	
-
-			.image-5, .image-6, .image-7, .image-8 {
-				display: none; 
+			.background-grid {
+				/* Shrink the grid blocks for phone screens */
+				grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+				grid-auto-rows: 120px; 
+				gap: 8px; 
+				padding: 8px;
+				opacity: 0.25; 
 			}
-
-			.image-1 { top: 3%; left: -2%; transform: rotate(-10deg); }
-			.image-2 { top: 3%; right: -2%; transform: rotate(15deg); }
-			.image-3 { bottom: 3%; left: -2%; transform: rotate(10deg); }
-			.image-4 { bottom: 3%; right: -2%; transform: rotate(-15deg); }
 			
 			.card {
 				width: 90%; 
 				padding: 30px 20px;
 			}
 		}
-		#customerEmail::placeholder {
-    	color: white;
-    	opacity: 1; /* Firefox lowers placeholder opacity by default, this forces it to be solid */
-		}
-
 	</style>
 </head>
 
 <body>
 
-	<img src="image1.jpg" class="bg-image image-1" alt="Historical Site">
-	<img src="2.jpg" class="bg-image image-2" alt="Historical Site">
-	<img src="3.jpg" class="bg-image image-3" alt="Historical Site">
-	<img src="4.jpeg" class="bg-image image-4" alt="Historical Site">
-	<img src="5.webp" class="bg-image image-5" alt="Historical Site">
-	<img src="6.webp" class="bg-image image-6" alt="Historical Site">
-	<img src="7.webp" class="bg-image image-7" alt="Historical Site">
-	<img src="8.png" class="bg-image image-8" alt="Historical Site">
+	<div class="background-grid">
+		<img src="image1.jpg" class="grid-image size-large" alt="Historical Site">
+		<img src="2.jpg" class="grid-image size-wide" alt="Historical Site">
+		<img src="3.jpg" class="grid-image size-tall" alt="Historical Site">
+		<img src="4.jpeg" class="grid-image size-small" alt="Historical Site">
+		<img src="5.webp" class="grid-image size-wide" alt="Historical Site">
+		<img src="6.webp" class="grid-image size-tall" alt="Historical Site">
+		<img src="7.webp" class="grid-image size-small" alt="Historical Site">
+		<img src="8.png" class="grid-image size-large" alt="Historical Site">
+	</div>
 
 	<div class="card">
 		<h2>Welcome to CHSMS</h2>
@@ -166,7 +185,7 @@
 			const source = document.getElementById('qrSource').value;
 
 			messageDiv.style.marginTop = '15px';
-			messageDiv.style.color = 'white'; /* Changed to black since background is white */
+			messageDiv.style.color = 'white'; 
 			messageDiv.innerText = 'Sending...';
 			submitButton.disabled = true; 
 
@@ -197,7 +216,7 @@
 				const result = await response.json();
 				
 				if (response.ok) {
-					messageDiv.style.color = '#4CAF50'; /* A slightly darker green for white backgrounds */
+					messageDiv.style.color = '#4CAF50'; 
 					messageDiv.innerText = 'Email sent successfully!';
 					emailInput.value = ''; 
 				} else {
