@@ -13,7 +13,7 @@
 			justify-content: center;
 			align-items: center;
 			height: 100vh;
-			background-color: #FFFFFF;
+			background-color: #ffffff;
 			margin: 0;
 			position: relative;
 			overflow: hidden;
@@ -21,18 +21,18 @@
 
 		/* --- NEW: Museum Archive Background Style --- */
 		.bg-image {
-			position: absolute;
-			width: 180px; 
-			height: 120px; 
-			object-fit: cover; 
-			border-radius: 12px; 
-			opacity: 0.15; 
-			filter: grayscale(100%) blur(1px); 
-			box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-			user-select: none;
-			pointer-events: none;
-			z-index: 1;
-			transition: all 0.5s ease;
+		position: absolute;
+		width: 240px;  /* INCREASED FROM 180px */
+		height: 160px; /* INCREASED FROM 120px */
+		object-fit: cover; 
+		border-radius: 12px; 
+		opacity: 0.25; /* You can increase this to 0.3 or 0.4 if you want them brighter */
+		/*filter: grayscale(100%); /* BLUR REMOVED. (Delete this whole line if you want full-color images) */
+		box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+		user-select: none;
+		pointer-events: none;
+		z-index: 1;
+		transition: all 0.5s ease;
 		}
 
 		/* Desktop Positioning */
@@ -40,13 +40,13 @@
 		.image-2 { top: 12%; right: 10%; transform: rotate(20deg); }
 		.image-3 { bottom: 10%; left: 12%; transform: rotate(10deg); }
 		.image-4 { bottom: 8%; right: 8%; transform: rotate(-25deg); }
-		.image-5 { top: 45%; left: 5%; transform: rotate(45deg); width: 140px; height: 140px; }
-		.image-6 { top: 48%; right: 5%; transform: rotate(-30deg); width: 140px; height: 140px; }
+		.image-5 { top: 42%; left: 18.5%; transform: rotate(45deg); width: 140px; height: 140px; }
+		.image-6 { top: 45%; right: 18.5%; transform: rotate(-30deg); width: 140px; height: 140px; }
 		.image-7 { top: 6%; left: 48%; transform: rotate(15deg); }
 		.image-8 { bottom: 6%; left: 50%; transform: rotate(-10deg); }
 
 		.card {
-			background: White;
+			background: #284A9D;
 			padding: 40px 30px;
 			border-radius: 15px;
 			box-shadow: 0 4px 20px rgba(0,0,0,0.3);
@@ -58,16 +58,16 @@
 		}
 
 		h2, p {
-			color: #284A9D;
+			color: #ffffff;
 		}
 
 		input {
 			width: 90%;
 			padding: 12px;
 			border: none;
-			border-bottom: 2px solid black;
+			border-bottom: 2px solid rgb(255, 255, 255);
 			background: transparent;
-			color: black;
+			color: rgb(255, 255, 255);
 			outline: none;
 		}
 
@@ -104,23 +104,28 @@
 				padding: 30px 20px;
 			}
 		}
+		#customerEmail::placeholder {
+    	color: white;
+    	opacity: 1; /* Firefox lowers placeholder opacity by default, this forces it to be solid */
+		}
+
 	</style>
 </head>
 
 <body>
 
-	<img src="YOUR_IMAGE_LINK_1.jpg" class="bg-image image-1" alt="Historical Site">
-	<img src="YOUR_IMAGE_LINK_2.jpg" class="bg-image image-2" alt="Historical Site">
-	<img src="YOUR_IMAGE_LINK_3.jpg" class="bg-image image-3" alt="Historical Site">
-	<img src="YOUR_IMAGE_LINK_4.jpg" class="bg-image image-4" alt="Historical Site">
-	<img src="YOUR_IMAGE_LINK_5.jpg" class="bg-image image-5" alt="Historical Site">
-	<img src="YOUR_IMAGE_LINK_6.jpg" class="bg-image image-6" alt="Historical Site">
-	<img src="YOUR_IMAGE_LINK_7.jpg" class="bg-image image-7" alt="Historical Site">
-	<img src="YOUR_IMAGE_LINK_8.jpg" class="bg-image image-8" alt="Historical Site">
+	<img src="image1.jpg" class="bg-image image-1" alt="Historical Site">
+	<img src="2.jpg" class="bg-image image-2" alt="Historical Site">
+	<img src="3.jpg" class="bg-image image-3" alt="Historical Site">
+	<img src="4.jpeg" class="bg-image image-4" alt="Historical Site">
+	<img src="5.webp" class="bg-image image-5" alt="Historical Site">
+	<img src="6.webp" class="bg-image image-6" alt="Historical Site">
+	<img src="7.webp" class="bg-image image-7" alt="Historical Site">
+	<img src="8.png" class="bg-image image-8" alt="Historical Site">
 
 	<div class="card">
 		<h2>Welcome to CHSMS</h2>
-		<p style="color: black;">Please enter your email below.</p>
+		<p style="color: white;">Please enter your email below.</p>
 
 		<form id="emailForm">
 			<input type="hidden" id="qrSource" value="1" />
