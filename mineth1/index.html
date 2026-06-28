@@ -19,23 +19,31 @@
 			overflow: hidden;
 		}
 
-		.bg-emoji {
+		/* --- NEW: Museum Archive Background Style --- */
+		.bg-image {
 			position: absolute;
-			font-size: 75px;
-			opacity: 0.07;
+			width: 180px; 
+			height: 120px; 
+			object-fit: cover; 
+			border-radius: 12px; 
+			opacity: 0.15; 
+			filter: grayscale(100%) blur(1px); 
+			box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 			user-select: none;
 			pointer-events: none;
 			z-index: 1;
+			transition: all 0.5s ease;
 		}
 
-		.emoji-1 { top: 8%; left: 8%; transform: rotate(-15deg); }
-		.emoji-2 { top: 12%; right: 10%; transform: rotate(20deg); }
-		.emoji-3 { bottom: 10%; left: 12%; transform: rotate(10deg); }
-		.emoji-4 { bottom: 8%; right: 8%; transform: rotate(-25deg); }
-		.emoji-5 { top: 45%; left: 5%; transform: rotate(45deg); font-size: 65px; }
-		.emoji-6 { top: 48%; right: 5%; transform: rotate(-30deg); font-size: 65px; }
-		.emoji-7 { top: 6%; left: 48%; transform: rotate(15deg); font-size: 70px; }
-		.emoji-8 { bottom: 6%; left: 50%; transform: rotate(-10deg); font-size: 70px; }
+		/* Desktop Positioning */
+		.image-1 { top: 8%; left: 8%; transform: rotate(-15deg); }
+		.image-2 { top: 12%; right: 10%; transform: rotate(20deg); }
+		.image-3 { bottom: 10%; left: 12%; transform: rotate(10deg); }
+		.image-4 { bottom: 8%; right: 8%; transform: rotate(-25deg); }
+		.image-5 { top: 45%; left: 5%; transform: rotate(45deg); width: 140px; height: 140px; }
+		.image-6 { top: 48%; right: 5%; transform: rotate(-30deg); width: 140px; height: 140px; }
+		.image-7 { top: 6%; left: 48%; transform: rotate(15deg); }
+		.image-8 { bottom: 6%; left: 50%; transform: rotate(-10deg); }
 
 		.card {
 			background: White;
@@ -73,19 +81,42 @@
 			font-weight: bold;
 			margin-top: 30px;
 		}
+
+		/* --- NEW: Mobile Responsive Fixes --- */
+		@media (max-width: 768px) {
+			.bg-image {
+				width: 90px;
+				height: 60px;
+				opacity: 0.10; 
+			}
+
+			.image-5, .image-6, .image-7, .image-8 {
+				display: none; 
+			}
+
+			.image-1 { top: 3%; left: -2%; transform: rotate(-10deg); }
+			.image-2 { top: 3%; right: -2%; transform: rotate(15deg); }
+			.image-3 { bottom: 3%; left: -2%; transform: rotate(10deg); }
+			.image-4 { bottom: 3%; right: -2%; transform: rotate(-15deg); }
+			
+			.card {
+				width: 90%; 
+				padding: 30px 20px;
+			}
+		}
 	</style>
 </head>
 
 <body>
 
-	<div class="bg-emoji emoji-1">🏛️</div>
-	<div class="bg-emoji emoji-2">📜</div>
-	<div class="bg-emoji emoji-3">🗺️</div>
-	<div class="bg-emoji emoji-4">🧭</div>
-	<div class="bg-emoji emoji-5">🗿</div>
-	<div class="bg-emoji emoji-6">🏰</div>
-	<div class="bg-emoji emoji-7">🎨</div>
-	<div class="bg-emoji emoji-8">🧱</div>
+	<img src="YOUR_IMAGE_LINK_1.jpg" class="bg-image image-1" alt="Historical Site">
+	<img src="YOUR_IMAGE_LINK_2.jpg" class="bg-image image-2" alt="Historical Site">
+	<img src="YOUR_IMAGE_LINK_3.jpg" class="bg-image image-3" alt="Historical Site">
+	<img src="YOUR_IMAGE_LINK_4.jpg" class="bg-image image-4" alt="Historical Site">
+	<img src="YOUR_IMAGE_LINK_5.jpg" class="bg-image image-5" alt="Historical Site">
+	<img src="YOUR_IMAGE_LINK_6.jpg" class="bg-image image-6" alt="Historical Site">
+	<img src="YOUR_IMAGE_LINK_7.jpg" class="bg-image image-7" alt="Historical Site">
+	<img src="YOUR_IMAGE_LINK_8.jpg" class="bg-image image-8" alt="Historical Site">
 
 	<div class="card">
 		<h2>Welcome to CHSMS</h2>
@@ -106,11 +137,10 @@
 		const SUPABASE_URL = "https://hwhqwjivazdozojhkeli.supabase.co";
 		const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh3aHF3aml2YXpkb3pvamhrZWxpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3NTgwNjcsImV4cCI6MjA5NzMzNDA2N30.5qgsM9KZ2Ff7EiYWab9yCXfhmibRZOwh4UXM0UiU92Q";
 
-		// Renamed to 'supabaseClient' to completely avoid the duplicate error
 		const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 		document.getElementById('emailForm').addEventListener('submit', async (e) => {
-			e.preventDefault(); // This will now successfully stop the page redirect!
+			e.preventDefault(); 
 			
 			const emailInput = document.getElementById('customerEmail');
 			const messageDiv = document.getElementById('message');
@@ -120,12 +150,11 @@
 			const source = document.getElementById('qrSource').value;
 
 			messageDiv.style.marginTop = '15px';
-			messageDiv.style.color = 'white';
+			messageDiv.style.color = 'black'; /* Changed to black since background is white */
 			messageDiv.innerText = 'Sending...';
 			submitButton.disabled = true; 
 
 			try {
-				// Using the renamed 'supabaseClient' here
 				const { error: dbError } = await supabaseClient
 					.from('visitors_emails')
 					.insert([
@@ -152,7 +181,7 @@
 				const result = await response.json();
 				
 				if (response.ok) {
-					messageDiv.style.color = '#8BC34A'; 
+					messageDiv.style.color = '#4CAF50'; /* A slightly darker green for white backgrounds */
 					messageDiv.innerText = 'Email sent successfully!';
 					emailInput.value = ''; 
 				} else {
